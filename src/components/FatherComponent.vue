@@ -10,6 +10,7 @@
         :name="friend.name"
         :email="friend.email"
         :phone="friend.phone"
+
       />
     </div>
     <ListFriends
@@ -23,6 +24,7 @@
       :name="friend.name"
       :email="friend.email"
       :phone="friend.phone"
+      :photo="friend.image"
     />
   </div>
 </template>
@@ -38,6 +40,7 @@ export default {
   components: { ListFriends,AddNewFriend ,EditFriend},
   data() {
     return {
+      formData:'',
         showEdit:false,
         editId:0,
         ar:[],
@@ -55,15 +58,21 @@ export default {
     };
   },
   methods:{
-      addFriendToArray(obj){
-        console.log(JSON.stringify(obj));
+      addFriendToArray(obj,file){
+        this.formData  = new FormData();
+        this.formData.append("file",file);
+        this.formData.append("User",JSON.stringify(obj));
+        console.log(file);
           axios({
-            headers: {
-        'Content-Type': 'application/json'
-    },
+                    headers:{
+                    'Content-Type': 'application/json',
+  
+                    
+                    
+          },
             url:ADD_END_POINT,
             method:'post',
-            data:JSON.stringify(obj)
+            data: this.formData,
           }).then(response => {this.friends = [response.data,...this.friends]})
 
       },
@@ -116,8 +125,8 @@ export default {
    mounted () {
    this.friends =axios
       .get('http://localhost:8080/users/')
-      .then(response =>this.friends= response.data);
-      console.log("je suis mounted");
+      .then(response =>this.friends =response.data).then(()=>console.log(this.friends));
+      console.log("je suis mounted"+this.friends);
 
   },
   apdated(){

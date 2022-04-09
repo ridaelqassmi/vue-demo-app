@@ -1,9 +1,25 @@
 <template>
   <div class="container">
+    <v-row >
+      <v-col cols="12" lg="4">FULL NAME</v-col>
+      <v-col
+        cols="12"
+        
+          lg="8"
+        
+      >
+ <v-text-field
+            label="Outlined"
+            placeholder="Placeholder"
+            outlined
+            v-model="name"
+    >
+    </v-text-field>
+      </v-col>
+    </v-row>
+   
     <div class="rows">
-      <div class="column">
-        <label class="label">Name : </label><input type="text" v-model="name" />
-      </div>
+     
       <div class="column">
         <label class="label">Email : </label
         ><input type="text" v-model="email" />
@@ -13,7 +29,26 @@
         <input type="text" v-model="phone" />
       </div>
       <div class="column">
-        <button class="button" @click="submitform">submit</button>
+        <label for="">Upload file</label>
+       
+        
+        <v-file-input
+        ref='fileToUpload'
+          label="File input"
+          filled
+          prepend-icon="mdi-camera"
+        ></v-file-input>
+      </div>
+      
+      <div class="column">
+        
+            <v-btn @click="submitform"
+          depressed
+          color="primary"
+        >
+      Submit
+    </v-btn>
+
       </div>
     </div>
   </div>
@@ -30,11 +65,13 @@ export default {
   emit: ["add-friend"],
   methods: {
     submitform() {
-      let obj = { name: this.name, email: this.email, phone: this.phone };
-      this.$emit("add-friend", obj);
+      let obj = { name: this.name, email: this.email, phone: this.phone};
+      this.$emit("add-friend", obj,this.$refs.fileToUpload.files[0]);
       this.name = "";
       this.email = "";
       this.phone = "";
+      console.log(this.$refs.fileToUpload.files[0])
+      
     },
   },
 };
